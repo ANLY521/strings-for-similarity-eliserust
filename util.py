@@ -10,9 +10,10 @@ def parse_sts(data_file):
 
     with open(data_file, 'r') as d:
         for line in d:
-            if line.strip():
-                texts.append(line.lower().strip())
-                labels.append(line.lower().strip())
+            fields = line.strip().split("\t")
+            labels.append(float(fields[4]))  # labels column
+            texts.append(fields[5].lower().strip())
+
     return texts, labels
 
 

@@ -12,8 +12,15 @@ def symmetrical_nist(text_pair):
     :param text_pair: iterable to two strings to compare
     :return: a float
     """
-    nist_1 = sentence_nist(text_pair)
-    nist_2 = sentence_nist(text_pair)
+
+    t1, t2 = text_pair
+
+    # Need to tokenize text to input into NIST
+    t1_tokens = word_tokenize(t1.lower())
+    t2_tokens = word_tokenize(t2.lower())
+
+    nist_1 = sentence_nist([t1_tokens, ], t2_tokens)
+    nist_2 = sentence_nist([t2_tokens, ], t1_tokens)
 
     return nist_1 + nist_2
 
@@ -25,6 +32,8 @@ def main(sts_data):
     texts, labels = parse_sts(sts_data)
 
     print(f"Found {len(texts)} STS pairs")
+
+    #sys.exit()
 
     # take a sample of sentences so the code runs fast for faster debugging
     # when you're done debugging, you may want to run this on more!
@@ -39,6 +48,7 @@ def main(sts_data):
         print(f"Sentences: {texts[0]}\t{texts[1]}")
         # TODO 2: Calculate NIST for each pair of sentences
         # Define the function symmetrical_nist
+        sys.exit()
 
         nist_total = symmetrical_nist(text_pair)
         print(f"Label: {label}, NIST: {nist_total:0.02f}\n")
