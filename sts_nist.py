@@ -3,6 +3,7 @@ from nltk.translate.nist_score import sentence_nist
 from util import parse_sts
 import argparse
 import numpy as np
+import sys
 
 
 def symmetrical_nist(text_pair):
@@ -11,8 +12,8 @@ def symmetrical_nist(text_pair):
     :param text_pair: iterable to two strings to compare
     :return: a float
     """
-    nist_1 = 0.0
-    nist_2 = 0.0
+    nist_1 = sentence_nist(text_pair)
+    nist_2 = sentence_nist(text_pair)
 
     return nist_1 + nist_2
 
@@ -42,6 +43,7 @@ def main(sts_data):
         nist_total = symmetrical_nist(text_pair)
         print(f"Label: {label}, NIST: {nist_total:0.02f}\n")
         scores.append(nist_total)
+
 
     # This assertion verifies that symmetrical_nist is symmetrical
     # if the assertion holds, execution continues. If it does not, the program crashes

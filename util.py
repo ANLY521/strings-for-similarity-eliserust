@@ -8,4 +8,12 @@ def parse_sts(data_file):
     texts = []
     labels = []
 
+    with open(data_file, 'r') as d:
+        for line in d:
+            if line.strip():
+                texts.append(line.lower().strip())
+                labels.append(line.lower().strip())
+    return texts, labels
+
+
     return texts, labels
