@@ -60,7 +60,6 @@ def main(sts_data):
         print(f"Label: {label}, NIST: {nist_total:0.02f}\n")
         scores.append(nist_total)
 
-    sys.exit()
 
     # This assertion verifies that symmetrical_nist is symmetrical
     # if the assertion holds, execution continues. If it does not, the program crashes
@@ -69,11 +68,23 @@ def main(sts_data):
     text_a, text_b = first_pair
     nist_ab = symmetrical_nist((text_a, text_b))
     nist_ba = symmetrical_nist((text_b, text_a))
+    #print(nist_ab)
+    #print(nist_ba)
+    #sys.exit()
     assert nist_ab == nist_ba, f"Symmetrical NIST is not symmetrical! Got {nist_ab} and {nist_ba}"
 
     # TODO 3: find and print the sentences from the sample with the highest and lowest scores
+    min_score_index = np.argmin(scores)
+    min_score = scores[min_score_index]
+    print(f"Lowest score: {min_score}")
+    print(sample_text[min_score_index])
+    assert min_score == symmetrical_nist(sample_text[min_score_index])
 
-
+    max_score_index = np.argmax(scores)
+    max_score = scores[max_score_index]
+    print(f"Highest score: {max_score}")
+    print(sample_text[max_score_index])
+    assert max_score == symmetrical_nist(sample_text[max_score_index])
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
