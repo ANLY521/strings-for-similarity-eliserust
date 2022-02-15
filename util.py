@@ -12,7 +12,9 @@ def parse_sts(data_file):
         for line in d:
             fields = line.strip().split("\t")
             labels.append(float(fields[4]))  # labels column
-            texts.append(fields[5].lower().strip())
+            t1 = fields[5].lower()
+            t2 = fields[6].lower()
+            texts.append((t1, t2))
 
     return texts, labels
 
