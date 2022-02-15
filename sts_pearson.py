@@ -1,6 +1,10 @@
 from scipy.stats import pearsonr
 import argparse
 from util import parse_sts
+import sys
+from nltk import word_tokenize
+from sts_metrics import symmetrical_nist, symmetrical_bleu
+#from jiwer import wer
 
 
 def main(sts_data):
@@ -9,12 +13,38 @@ def main(sts_data):
 
     # TODO 1: read the dataset; implement in util.py
     texts, labels = parse_sts(sts_data)
+    #print(texts)
+    #print(labels)
 
     print(f"Found {len(texts)} STS pairs")
+
 
     # TODO 2: Calculate each of the the metrics here for each text pair in the dataset
     # HINT: Longest common substring can be complicated. Investigate difflib.SequenceMatcher for a good option.
     score_types = ["NIST", "BLEU", "Word Error Rate", "Longest common substring", "Edit Distance"]
+
+    nist_scores = []
+    bleu_scores = []
+    wer_scores = []
+    lcs_scores = []
+    ed_scores = []
+
+    # loop through all text pairs
+    text_data = zip(labels, texts)
+    for label, text_pair in text_data:
+        # NIST
+        nist_total = symmetrical_nist(text_pair)
+        nist_scores.append(nist_total)
+
+        # BLEU
+        bleu_total = symmetrical_bleu(text_pair)
+        bleu_scores.append(bleu_total)
+
+        # Word Error Rate
+
+        sys.exit()
+
+        # WER
 
     #TODO 3: Calculate pearson r between each metric and the STS labels and report in the README.
     # Sample code to print results. You can alter the printing as you see fit. It is most important to put the results
