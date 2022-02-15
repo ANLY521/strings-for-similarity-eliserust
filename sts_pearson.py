@@ -4,7 +4,7 @@ from util import parse_sts
 import sys
 from nltk import word_tokenize
 from sts_metrics import symmetrical_nist, symmetrical_bleu
-#from jiwer import wer
+from jiwer import wer
 
 
 def main(sts_data):
@@ -41,10 +41,13 @@ def main(sts_data):
         bleu_scores.append(bleu_total)
 
         # Word Error Rate
+        t1, t2 = text_pair
+        wer_error = wer(t1, t2)
+        wer_scores.append(wer_error)
+
+        # Longest Common Substring
 
         sys.exit()
-
-        # WER
 
     #TODO 3: Calculate pearson r between each metric and the STS labels and report in the README.
     # Sample code to print results. You can alter the printing as you see fit. It is most important to put the results
