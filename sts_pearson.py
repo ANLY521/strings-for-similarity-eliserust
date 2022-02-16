@@ -1,10 +1,12 @@
-from scipy.stats import pearsonr
 import argparse
-from util import parse_sts
 import sys
+from util import parse_sts
 from nltk import word_tokenize
-from sts_metrics import symmetrical_nist, symmetrical_bleu
+from scipy.stats import pearsonr
 from jiwer import wer
+import Levenshtein # for edit distance
+from sts_metrics import symmetrical_nist, symmetrical_bleu, lcs_symmetrical
+
 
 
 def main(sts_data):
@@ -31,10 +33,13 @@ def main(sts_data):
 
     # loop through all text pairs
     text_data = zip(labels, texts)
+
     for label, text_pair in text_data:
         # NIST
-        nist_total = symmetrical_nist(text_pair)
-        nist_scores.append(nist_total)
+        nist_ab = symmetrical_nist(text_pair)
+        nist_ba = symmetrical_nist(text_pair)
+        if nist_ab == nist_ba:
+            nist_scores.append(nist_ab)
 
         # BLEU
         bleu_total = symmetrical_bleu(text_pair)
@@ -46,8 +51,13 @@ def main(sts_data):
         wer_scores.append(wer_error)
 
         # Longest Common Substring
+        lcs_ratio = lcs_symmetrical(text_pair)
+        lcs_scores.append(lcs_ratio)
 
-        sys.exit()
+        # Edit Distance
+
+    # Verify that all the metrics are symmetrical
+
 
     #TODO 3: Calculate pearson r between each metric and the STS labels and report in the README.
     # Sample code to print results. You can alter the printing as you see fit. It is most important to put the results

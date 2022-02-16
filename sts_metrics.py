@@ -1,7 +1,8 @@
 from nltk import word_tokenize
 from nltk.translate.nist_score import sentence_nist
 from nltk.translate.bleu_score import sentence_bleu
-from mltk.translate.bleu_score import SmoothingFunction
+from nltk.translate.bleu_score import SmoothingFunction
+from difflib import SequenceMatcher
 from util import parse_sts
 import argparse
 import numpy as np
@@ -64,3 +65,35 @@ def symmetrical_bleu(text_pair):
         bleu_2 = 0.0
 
     return bleu_1 + bleu_2
+
+
+# LCS
+def lcs_symmetrical(text_pair):
+    """
+    Calculates symmetrical similarity as LCS(a,b) + LCS(b,a).
+    :param text_pair: iterable to two strings to compare
+    :return: a float
+    """
+
+    t1,t2 = text_pair
+
+    # Need to tokenize text to input into NIST
+    t1_tokens = word_tokenize(t1.lower())
+    t2_tokens = word_tokenize(t2.lower())
+
+    # try / except to deal with ZeroDivision Error - assign 0 if error occurs
+    lcs_seq1 = SequenceMatcher(None, t1_tokens, t2_tokens, autojunk=False)
+    lcs_seq2 = SequenceMatcher(None, t2_tokens, t1_tokens, autojunk=False)
+
+    lcs_ratio1 = lcs_seq1.ratio()*100
+    lcs_ratio2 = lcs_seq2.ratio()*100
+
+    return lcs_ratio1 + lcs_ratio2
+
+
+sys.exit()
+a = "abcd"
+b = "abcd"
+
+text = [a, b]
+lcs_symmetrical(text)
