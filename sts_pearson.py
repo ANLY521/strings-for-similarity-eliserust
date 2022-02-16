@@ -83,7 +83,7 @@ def main(sts_data):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--sts_data", type=str, default="stsbenchmark/sts-dev.csv",
+    parser.add_argument("--sts_data", type=str, default="stsbenchmark/sts-test.csv",
                         help="tab separated sts data in benchmark format")
     args = parser.parse_args()
 

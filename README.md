@@ -8,7 +8,17 @@ metrics constitute a good benchmark system for detecting STS.
 Data is from the [STS benchmark](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark).
 
 **TODO:**
-Describe each metric in ~ 1 sentence
+Describe each metric in ~ 1 sentence:
+
+BLEU = A metric that computes the amount of n-gram overlap between two sentences/phrases/words by looking at their tokens.
+
+NIST = A variant of BLEU that also computes n-gram overlap between phrases but weights each n-gram by frequency. 
+
+WER = Word error rate computes similarity by looking at how many "edits" (i.e. deletions, insertions, substitutions) need to occur before the two words are the same, divided by the number of words in reference. It's similar to ED but normalized.
+
+LCS = Longest common substring computes similarity by finding the longest substring ("set of characters") shared by the text pair. For example, between "trapeze" and "trampoline" the LCS is 3: "tra".
+
+ED = Edit distance is a variant of word error rate that looks at the shortest number of edits needed to make the text pair equivalent - using Levenshtein's distance.
 
 **TODO:** Fill in the correlations. Expected output for DEV is provided; it is ok if your actual result
 varies slightly due to preprocessing/system difference, but the difference should be quite small.
@@ -17,11 +27,11 @@ varies slightly due to preprocessing/system difference, but the difference shoul
 
 Metric | Train | Dev | Test 
 ------ | ----- | --- | ----
-NIST | (fill me) | 0.593 | (fill me)
-BLEU | (fill me) | 0.433 | (fill me)
-WER | (fill me) | -0.452| (fill me)
-LCS | (fill me) | 0.468| (fill me)
-Edit Dist | (fill me) | -0.175| (fill me)
+NIST | 0.496 | 0.593 | 0.475
+BLEU | 0.422 | 0.433 | 0.419
+WER | -0.411 | -0.452| -0.421
+LCS | 0.363 | 0.468| 0.347
+Edit Dist | 0.033 | -0.175| -0.039
 
 **TODO:**
 Show usage of the homework script with command line flags (see example under lab, week 1).
