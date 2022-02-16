@@ -55,15 +55,8 @@ def symmetrical_bleu(text_pair):
 
     # try / except to deal with ZeroDivision Error - assign 0 if error occurs
     bleu_smoothing = SmoothingFunction().method4
-    try:
-        bleu_1 = sentence_bleu([t1_tokens, ], t2_tokens, smoothing_function = bleu_smoothing)
-    except ZeroDivisionError:
-        bleu_1 = 0.0
-
-    try:
-        bleu_2 = sentence_bleu([t2_tokens, ], t1_tokens, smoothing_function = bleu_smoothing)
-    except ZeroDivisionError:
-        bleu_2 = 0.0
+    bleu_1 = sentence_bleu([t1_tokens, ], t2_tokens, smoothing_function = bleu_smoothing)
+    bleu_2 = sentence_bleu([t2_tokens, ], t1_tokens, smoothing_function = bleu_smoothing)
 
     return bleu_1 + bleu_2
 
@@ -78,18 +71,11 @@ def lcs_symmetrical(text_pair):
 
     t1,t2 = text_pair
 
-    # Need to tokenize text to input into LCS
-    t1_tokens = word_tokenize(t1.lower())
-    t2_tokens = word_tokenize(t2.lower())
+    lcs_seq1 = SequenceMatcher(None, t1, t2, autojunk=False)
+    lcs1 = lcs_seq1.find_longest_match(0, len(t1), 0, len(t2)) # returns named tuple
+    lcs_size = lcs1.size
 
-    # try / except to deal with ZeroDivision Error - assign 0 if error occurs
-    lcs_seq1 = SequenceMatcher(None, t1_tokens, t2_tokens, autojunk=False)
-    lcs_seq2 = SequenceMatcher(None, t2_tokens, t1_tokens, autojunk=False)
-
-    lcs_ratio1 = lcs_seq1.ratio()*100
-    lcs_ratio2 = lcs_seq2.ratio()*100
-
-    return lcs_ratio1 + lcs_ratio2
+    return lcs_size
 
 
 # Edit Distance
@@ -102,20 +88,26 @@ def edit_symmetrical(text_pair):
 
     t1, t2 = text_pair
 
-    # Need to tokenize text to input into NIST
+    # Calculate Levenshtein's edit distance
+    ed_1 = edit_distance(t1, t2)
+
+    return ed_1
+
+
+# Word Error Rate
+def wer_symmetrical(text_pair):
+    """
+    Calculates symmetrical similarity as LCS(a,b) + LCS(b,a).
+    :param text_pair: iterable to two strings to compare
+    :return: a float
+    """
+
+    t1, t2 = text_pair
     t1_tokens = word_tokenize(t1.lower())
     t2_tokens = word_tokenize(t2.lower())
 
-    # Calculate Levenshtein's edit distance
-    ed_1 = edit_distance(t1_tokens, t2_tokens)
-    ed_2 = edit_distance(t2_tokens, t1_tokens)
+    # Calculate Word Error Rate
+    wer = edit_distance(t1_tokens, t2_tokens)
+    wer_rate = wer/(len(t1) + len(t2))
 
-    return ed_1 + ed_2
-
-
-sys.exit()
-a = "abcd"
-b = "abcd"
-
-text = [a, b]
-lcs_symmetrical(text)
+    return wer_rate
