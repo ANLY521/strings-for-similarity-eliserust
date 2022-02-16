@@ -74,8 +74,8 @@ def main(sts_data):
 
     print(f"Semantic textual similarity for {sts_data}\n")
     for (columnName, columnData) in scores_df.iteritems():
-        x = labels
-        y = columnData.values
+        x = labels # pre-set labels
+        y = columnData.values # calculated metrics
         score = pearsonr(x, y)
         print(f"{columnName} correlation: {score[0]:.03f}")
 
