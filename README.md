@@ -10,9 +10,9 @@ Data is from the [STS benchmark](http://ixa2.si.ehu.es/stswiki/index.php/STSbenc
 **TODO:**
 Describe each metric in ~ 1 sentence:
 
-BLEU = A metric that computes the amount of n-gram overlap between two sentences/phrases/words by looking at their tokens.
+BLEU = A metric that computes the amount of n-gram overlap between two sentences/phrases/words by looking at their tokens. For example every word (token) in "coffee is good" and "coffee is good" match, thus the score = 1.0.
 
-NIST = A variant of BLEU that also computes n-gram overlap between phrases but weights each n-gram by frequency. 
+NIST = A variant of BLEU that also computes n-gram overlap between phrases but weights each n-gram by frequency and information gained by the n-gram match. 
 
 WER = Word error rate computes similarity by looking at how many "edits" (i.e. deletions, insertions, substitutions) need to occur before the two words are the same, divided by the number of words in reference. It's similar to ED but normalized.
 
