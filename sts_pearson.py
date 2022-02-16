@@ -35,22 +35,27 @@ def main(sts_data):
         # NIST
         nist_total = symmetrical_nist(text_pair)
         nist_scores.append(nist_total)
+        #print(nist_scores)
 
         # BLEU
         bleu_total = symmetrical_bleu(text_pair)
         bleu_scores.append(bleu_total)
+        #print(bleu_scores)
 
         # Word Error Rate
         wer_error = wer_symmetrical(text_pair)
         wer_scores.append(wer_error)
+        #print(wer_scores)
 
         # Longest Common Substring
         lcs_ratio = lcs_symmetrical(text_pair)
         lcs_scores.append(lcs_ratio)
+        #print(lcs_scores)
 
         # Edit Distance
         edit_total = edit_symmetrical(text_pair)
         ed_scores.append(edit_total)
+        #print(ed_scores)
 
 
 
@@ -58,19 +63,21 @@ def main(sts_data):
     # Sample code to print results. You can alter the printing as you see fit. It is most important to put the results
     # in a table in the README
 
-    scores_df = pd.DataFrame([[nist_scores],[bleu_scores], [wer_scores], [lcs_scores], [ed_scores]],
-                             columns = score_types)
-    print(scores_df)
+    scores_df = pd.DataFrame(
+    {'NIST': nist_scores,
+     'BLEU': bleu_scores,
+     'WER': wer_scores,
+     'LCS': lcs_scores,
+     'ED': ed_scores
+    })
 
 
     print(f"Semantic textual similarity for {sts_data}\n")
-    for metric_name in scores_df:
+    for (columnName, columnData) in scores_df.iteritems():
         x = labels
-        y = scores_df[metric_name]
-        print(x)
-        print(y)
+        y = columnData.values
         score = pearsonr(x, y)
-        print(f"{metric_name} correlation: {score:.03f}")
+        print(f"{columnName} correlation: {score[0]:.03f}")
 
     # TODO 4: Complete writeup as specified by TODOs in README (describe metrics; show usage)
 
