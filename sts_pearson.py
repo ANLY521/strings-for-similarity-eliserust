@@ -1,5 +1,6 @@
 import argparse
 import sys
+import pandas as pd
 from util import parse_sts
 from nltk import word_tokenize
 from scipy.stats import pearsonr
@@ -63,6 +64,13 @@ def main(sts_data):
     #TODO 3: Calculate pearson r between each metric and the STS labels and report in the README.
     # Sample code to print results. You can alter the printing as you see fit. It is most important to put the results
     # in a table in the README
+
+    scores_df = pd.DataFrame([[labels], [nist_scores],[bleu_scores], [wer_scores], [lcs_scores], [ed_scores]],
+                             columns = score_types)
+    print(scores_df)
+    sys.exit()
+
+
     print(f"Semantic textual similarity for {sts_data}\n")
     for metric_name in score_types:
         score = 0.0
