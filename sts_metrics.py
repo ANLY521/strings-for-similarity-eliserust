@@ -80,14 +80,8 @@ def lcs_symmetrical(text_pair):
 
 # Edit Distance
 def edit_symmetrical(text_pair):
-    """
-    Calculates symmetrical similarity as LCS(a,b) + LCS(b,a).
-    :param text_pair: iterable to two strings to compare
-    :return: a float
-    """
-
+    # Automatically symmetrical - not necessary to do two different scores
     t1, t2 = text_pair
-
     # Calculate Levenshtein's edit distance
     ed_1 = edit_distance(t1, t2)
 
@@ -96,12 +90,7 @@ def edit_symmetrical(text_pair):
 
 # Word Error Rate
 def wer_symmetrical(text_pair):
-    """
-    Calculates symmetrical similarity as LCS(a,b) + LCS(b,a).
-    :param text_pair: iterable to two strings to compare
-    :return: a float
-    """
-
+    # Automatically symmetrical - not necessary to do two different scores
     t1, t2 = text_pair
     t1_tokens = word_tokenize(t1.lower())
     t2_tokens = word_tokenize(t2.lower())
