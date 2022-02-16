@@ -2,6 +2,7 @@ from nltk import word_tokenize
 from nltk.translate.nist_score import sentence_nist
 from nltk.translate.bleu_score import sentence_bleu
 from nltk.translate.bleu_score import SmoothingFunction
+from nltk import edit_distance
 from difflib import SequenceMatcher
 from util import parse_sts
 import argparse
@@ -48,7 +49,7 @@ def symmetrical_bleu(text_pair):
 
     t1,t2 = text_pair
 
-    # Need to tokenize text to input into NIST
+    # Need to tokenize text to input into BLEU
     t1_tokens = word_tokenize(t1.lower())
     t2_tokens = word_tokenize(t2.lower())
 
@@ -77,7 +78,7 @@ def lcs_symmetrical(text_pair):
 
     t1,t2 = text_pair
 
-    # Need to tokenize text to input into NIST
+    # Need to tokenize text to input into LCS
     t1_tokens = word_tokenize(t1.lower())
     t2_tokens = word_tokenize(t2.lower())
 
@@ -89,6 +90,27 @@ def lcs_symmetrical(text_pair):
     lcs_ratio2 = lcs_seq2.ratio()*100
 
     return lcs_ratio1 + lcs_ratio2
+
+
+# Edit Distance
+def edit_symmetrical(text_pair):
+    """
+    Calculates symmetrical similarity as LCS(a,b) + LCS(b,a).
+    :param text_pair: iterable to two strings to compare
+    :return: a float
+    """
+
+    t1, t2 = text_pair
+
+    # Need to tokenize text to input into NIST
+    t1_tokens = word_tokenize(t1.lower())
+    t2_tokens = word_tokenize(t2.lower())
+
+    # Calculate Levenshtein's edit distance
+    ed_1 = edit_distance(t1_tokens, t2_tokens)
+    ed_2 = edit_distance(t2_tokens, t1_tokens)
+
+    return ed_1 + ed_2
 
 
 sys.exit()

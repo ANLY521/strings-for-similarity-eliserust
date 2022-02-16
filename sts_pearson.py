@@ -4,8 +4,7 @@ from util import parse_sts
 from nltk import word_tokenize
 from scipy.stats import pearsonr
 from jiwer import wer
-import Levenshtein # for edit distance
-from sts_metrics import symmetrical_nist, symmetrical_bleu, lcs_symmetrical
+from sts_metrics import symmetrical_nist, symmetrical_bleu, lcs_symmetrical, edit_symmetrical
 
 
 
@@ -55,6 +54,8 @@ def main(sts_data):
         lcs_scores.append(lcs_ratio)
 
         # Edit Distance
+        edit_total = edit_symmetrical(text_pair)
+        ed_scores.append(edit_total)
 
     # Verify that all the metrics are symmetrical
 
