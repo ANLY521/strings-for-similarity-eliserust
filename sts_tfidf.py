@@ -25,12 +25,16 @@ def preprocess_text(text):
     # Stemmer
     ps = PorterStemmer()
     text_clean = ps.stem(text)
+    # remove stopwords
+    stops = set(stopwords.words('english'))
     # tokenize + lowercase
-    text_clean = word_tokenize(text.clean.lower())
-    # remove punctuation
-    # removes stopwords
+    text_clean = word_tokenize(text_clean).lower()
+    # removes punctuation
+    text_stemmed = [ps.stem(text_clean) for text in text_clean]
+    text_nopunc = [text for text in text_stemmed if text not in string.punctuation] # filter out tokens in the "string.punctuation" group
+    text_nopunc = [text for text in text_nopunc if text not in stops] # filter out tokens in the stopwords
 
-    return " ".join(text_clean)
+    return " ".join(text_nopunc)
 
 
 def main(sts_data):
@@ -39,16 +43,18 @@ def main(sts_data):
 
     # TODO 1: get a single list of texts to determine vocabulary and document frequency
 
-    # get a single list of texts to determine vocabulary and document frequency
+    # get a single list of texts to determine vocabulary and document frequency --> input one list into TfidfVectorizer
     all_t1, all_t2 = zip(*texts)
     print(f"{len(all_t1)} texts total")
     all_texts = all_t1 + all_t2
 
     # create a TfidfVectorizer
+    # input = content bc dealing with list of strings
     vectorizer = TfidfVectorizer(input = "content", lowercase = True, analyzer = "word", use_idf = True, min_df = 10)
 
     # fit to the training data
     tfidf_vector = vectorizer.fit(all_texts)
+    print("Checking the vocabulary: ")
     print(tfidf_vector.get_feature_names())
 
 
@@ -57,10 +63,11 @@ def main(sts_data):
     preproc_train_texts = [preprocess_text(text) for text in texts]
     print(preproc_train_texts)
 
+
     # TODO 3: Learn another TfidfVectorizer for preprocessed data
     # Use token_pattern "\S+" in the TfidfVectorizer to split on spaces
-    vectorizer_preproc = TfidfVectorizer(input = "content", lowercase = True, analyzer = "word", use_idf = True, min_df = 10,
-                                         token_pattern = "\S+")
+    vectorizer_preproc = TfidfVectorizer(input = "content", lowercase = True, analyzer = "word", use_idf = True,
+                                         min_df = 10, token_pattern = "\S+")
     tfidf_preproc = vectorizer_preproc.fit(preproc_train_texts)
     print(tfidf_preproc.get_feature_names())
 
@@ -72,8 +79,8 @@ def main(sts_data):
         t1,t2 = pair
 
     # TODO 5: measure the correlations
-    pearson = 0.0
-    preproc_pearson = 0.0
+    pearson = pearsonr(cos_sims, labels)
+    preproc_pearson = pearsonr(cos_sims_preproc, labels)
     print(f"default settings: r={pearson:.03}")
     print(f"preprocessed text: r={preproc_pearson:.03}")
 
