@@ -21,20 +21,14 @@ def preprocess_text(text):
      removes punctuation tokens and stopwords.
      Returns a string of tokens joined by whitespace.
      """
-
     # Stemmer
-    ps = PorterStemmer()
-    text_clean = ps.stem(text)
-    # remove stopwords
-    stops = set(stopwords.words('english'))
-    # tokenize + lowercase
-    text_clean = word_tokenize(text_clean).lower()
-    # removes punctuation
-    text_stemmed = [ps.stem(text_clean) for text in text_clean]
-    text_nopunc = [text for text in text_stemmed if text not in string.punctuation] # filter out tokens in the "string.punctuation" group
-    text_nopunc = [text for text in text_nopunc if text not in stops] # filter out tokens in the stopwords
-
-    return " ".join(text_nopunc)
+    stemmer = PorterStemmer()
+    stops = set(stopwords.words('english')) # Identify  stop words
+    toks = word_tokenize(text) # Tokenize sentence
+    toks_stemmed = [stemmer.stem(tok.lower()) for tok in toks] # STEM tokens
+    toks_nopunc = [tok for tok in toks_stemmed if tok not in string.punctuation] # Remove punctuation
+    toks_nostop = [tok for tok in toks_nopunc if tok not in stops] # Remove stopwords
+    return " ".join(toks_nostop)
 
 
 def main(sts_data):
@@ -77,6 +71,17 @@ def main(sts_data):
 
     for pair in texts:
         t1,t2 = pair
+        pair_reprs = vectorizer.transform([t1, t2])
+        pair_similarity = cosine_similarity(pair_reprs[0], pair_reprs[1])
+        print(pair_similarity)
+        cos_sims.append(pair_similarity[0,0])
+
+        t1_preproc = preprocess_text(t1)
+        t2_preproc = preprocess_text(t2)
+        pair_reprs = vectorizer_preproc([t1_preproc, t2_preproc])
+        pair_similarity = cosine_similarity(pair_reprs[0], pair_reprs[1])
+        print(pair_similarity)
+        cos_sims_preproc.append(pair_similarity[0,0])
 
     # TODO 5: measure the correlations
     pearson = pearsonr(cos_sims, labels)
